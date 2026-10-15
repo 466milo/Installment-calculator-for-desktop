@@ -1,0 +1,40 @@
+{
+  "name": "installment-calculator-desktop",
+  "productName": "Installment Calculator",
+  "version": "1.0.0",
+  "description": "Desktop (Electron) version of the Installment Calculator app",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n vite,electron -c cyan,green \"vite\" \"wait-on tcp:5173 && electron . --dev\"",
+    "build": "tsc --noEmit && vite build",
+    "start": "npm run build && electron .",
+    "typecheck": "tsc --noEmit",
+    "dist": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "firebase": "10.12.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "~5.6.3",
+    "vite": "^5.4.11",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "com.installshop.calculator.desktop",
+    "productName": "Installment Calculator",
+    "files": ["dist/**", "electron/**", "package.json"],
+    "directories": { "output": "release" },
+    "win": { "target": "nsis" },
+    "mac": { "target": "dmg", "category": "public.app-category.finance" },
+    "linux": { "target": "AppImage", "category": "Office" }
+  }
+}
