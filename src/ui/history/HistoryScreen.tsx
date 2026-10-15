@@ -53,7 +53,7 @@ export default function HistoryScreen({ onOpen }: { onOpen: (id: string) => void
           <div key={p.id} className="card" onClick={() => onOpen(p.id)} role="button" tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') onOpen(p.id); }}>
             <div className="card-head">
-              <span className="date">{formatDate(p.createdAt)}</span>
+              <span className="plan-name">{p.name || 'Untitled'}</span>
               <button
                 className="delete"
                 onClick={(e) => { e.stopPropagation(); doDelete(p); }}
@@ -61,6 +61,7 @@ export default function HistoryScreen({ onOpen }: { onOpen: (id: string) => void
                 Delete
               </button>
             </div>
+            <span className="date">{formatDate(p.createdAt)}</span>
             <Line label="Actual Price" value={rs(p.actualPrice)} />
             <Line label="Total Installment Price" value={rs(p.totalInstallmentPrice)} />
             <Line label="Down Payment" value={rs(p.downPaymentAmount)} />

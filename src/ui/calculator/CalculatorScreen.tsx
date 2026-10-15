@@ -1,12 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useCalculator } from '../../hooks/useCalculator';
 import { plain, rs } from '../../domain/calculator/format';
 import { HighlightCard, NumberField, ResultRow, Section } from '../components/Components';
 import BasicCalculator from '../components/BasicCalculator';
+import SaveDialog from '../components/SaveDialog';
 
 export default function CalculatorScreen({ planId }: { planId?: string }) {
   const c = useCalculator(planId);
   const { inputs, result: r } = c;
+  const [saving, setSaving] = useState(false);
   const refs = useRef<(HTMLInputElement | null)[]>([]);
   const next = (i: number) => () => refs.current[i + 1]?.focus();
   const ref = (i: number) => (el: HTMLInputElement | null) => { refs.current[i] = el; };
@@ -71,11 +73,22 @@ export default function CalculatorScreen({ planId }: { planId?: string }) {
 
         <div className="buttons">
           <button className="btn btn-outline" onClick={c.reset}>Reset</button>
-          <button className="btn btn-fill" disabled={!r.canSave} onClick={c.save}>
+          <button className="btn btn-fill" disabled={!r.canSave} onClick={() => setSaving(true)}>
             Save Calculation
           </button>
         </div>
       </div>
+
+      {saving ? (
+        <SaveDialog
+          onCancel={() => setSaving(false)}
+          onSave={async (name) => {
+            const ok = await c.save(name);
+            if (ok) setSaving(false);
+            return ok;
+          }}
+        />
+      ) : null}
 
       <aside className="calc-side">
         <BasicCalculator

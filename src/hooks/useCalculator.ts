@@ -68,11 +68,13 @@ export function useCalculator(planId?: string) {
     onInstallments: (v: string) => update((i) => ({ ...i, installments: filterInt(v), lastEdited: freeForCount(i) })),
     onMonthly: (v: string) => update((i) => ({ ...i, monthly: filterDecimal(v), lastEdited: 'monthly' })),
     reset: () => setInputs(emptyInputs()),
-    save: async () => {
+    save: async (name: string): Promise<boolean> => {
       const r = result;
-      if (!r.canSave) return;
+      const trimmed = name.trim();
+      if (!r.canSave || !trimmed) return false;
       try {
         await planRepository.save({
+          name: trimmed,
           actualPrice: r.actual,
           installmentPercentage: r.percent,
           totalInstallmentPrice: r.total,
@@ -82,9 +84,11 @@ export function useCalculator(planId?: string) {
           numberOfInstallments: r.installments,
           monthlyInstallment: r.monthly!,
         });
-        flash('Calculation saved');
+        flash(`Saved as "${trimmed}"`);
+        return true;
       } catch {
         flash('Could not save calculation');
+        return false;
       }
     },
   };

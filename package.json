@@ -33,7 +33,10 @@
     "productName": "Installment Calculator",
     "files": ["dist/**", "electron/**", "package.json"],
     "directories": { "output": "release" },
-    "win": { "target": "nsis" },
+    "win": { 
+    "icon": "build/icon.ico", 
+    "target": "nsis" 
+  },
     "mac": { "target": "dmg", "category": "public.app-category.finance" },
     "linux": { "target": "AppImage", "category": "Office" }
   }

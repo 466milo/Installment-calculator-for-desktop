@@ -21,6 +21,8 @@ export interface Customer {
 /** customerId / productId are nullable: v1 saves plain calculations with no customer or product. */
 export interface InstallmentPlan {
   id: string;
+  /** Name given when saving. Optional because calculations saved before this feature have none. */
+  name?: string;
   customerId: string | null;
   productId: string | null;
   actualPrice: number;
